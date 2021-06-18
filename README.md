@@ -1,3 +1,22 @@
+Please refer to [Wiki](https://github.com/MDC-Berlin-Kaminski-team/scifiRNA-seq/wiki) for running / installation Instructions.
+
+# About this repository
+
+This is a fork of the original repository at: https://github.com/epigen/scifiRNA-seq
+
+The main reason for the fork is that the original pipeline could have been run practically only on a cluster. In local version it was spawning numerous processes - each for an Illumina well. It led immediately to immense use of RAM and CPUs.
+
+The update version controls the maximal number of processes used. The original pipeline, aka `scifi` accepts now two new command line options:
+
+`--nocluster` - use it when running the pipeline locally.  
+`--num-processes` - by default 10, the maximal number of processes the pipeline is about to spawn.  
+
+Note: the number of CPU used might be about x4 times as the number of processes as each of the processes runs STAR with 4 threads. So in default configuration be prepared 40 CPUs to be clocking.
+
+See below the content of the original README.md file:
+
+***
+
 > :warning: **This repository is experimental**: Testing is very limited and we
 provide no promise of continually developing or maintain it!
 
