@@ -114,8 +114,21 @@ def build_cli() -> argparse.ArgumentParser:
         "--input-bam-glob",
         dest="input_bam_glob",
         help=_help,
-        required=True,
+        required=False,
         type=os.path.abspath,
+    )
+    map_cmd.add_argument(
+        "--nocluster",
+        help="Use the option if the jobs are running on the local machine "
+             "and not on the cluster.",
+        action="store_true"
+    )
+    map_cmd.add_argument(
+        "--num-processes",
+        help="Number of processes used to run the jobs (relevant only when --nocluster is used)",
+        dest="num_processes",
+        default=5,
+        type=int
     )
 
     # Filter-specific

@@ -7,6 +7,8 @@ Utilities for job submission and management by the scifi pipeline.
 
 
 import subprocess
+from multiprocessing import Pool
+import os
 
 
 def job_shebang() -> str:
@@ -33,13 +35,17 @@ def write_job_to_file(job, job_file) -> None:
     with open(job_file, "w") as handle:
         handle.write(job)
 
+def launch_process(cmd) -> None:
+    #print(f'About to launch {cmd} pid {os.getpid()}\n')
+    subprocess.call(cmd, stdout=subprocess.DEVNULL)
+    #print(f'Finished {os.getpid()}\n')
 
 def submit_job(job_file, params, array=None, cmd=None, dry=False) -> None:
     if dry:
         return
     if cmd is None:
         cmd = "sh -e"
-
+    
     if cmd == "sbatch":
         if array is not None:
             array = f"--array={array} -N 1\\\n"
@@ -53,6 +59,10 @@ def submit_job(job_file, params, array=None, cmd=None, dry=False) -> None:
         subprocess.Popen(cmd.split(" "))
     else:
         subprocess.Popen(cmd.split(" ") + [job_file])
+
+def submit_pool(args, pool_cmds) -> None:
+    with Pool(processes=args.num_processes) as pool:
+        pool.map(launch_process, pool_cmds)
 
 
 # def capture_slurm_job():

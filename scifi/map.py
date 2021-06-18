@@ -21,8 +21,8 @@ from scifi.job_control import (
     job_end,
     write_job_to_file,
     submit_job,
+    submit_pool
 )
-
 
 def map_command(
     args: argparse.Namespace,
@@ -36,6 +36,7 @@ def map_command(
 
     prefixes = list()
     bams = list()
+    r1_names = list()
     _LOGGER.debug("Getting input BAM files for each r1 barcode.")
     attrs = pd.Series(args.input_bam_glob).str.extractall("{(.*?)}").squeeze()
     attrs = set([attrs] if isinstance(attrs, str) else attrs)
@@ -61,14 +62,16 @@ def map_command(
         _LOGGER.debug(f"BAM files of sample '{r1_name}': '{bam_files}'")
         prefixes.append(out_prefix)
         bams.append(bam_files)
+        r1_names.append(r1_name)
 
     if (not prefixes) or (not bam_files):
         _LOGGER.debug("Either 'prefixes' or 'bam_files' is an empty list.")
         _LOGGER.error("Nothing to process! Likely no BAM files were found!")
         return 1
 
+    pool_cmds = list()
     if not args.arrayed:
-        for out_prefix, bam_files in zip(prefixes, bams):
+        for r1_name, out_prefix, bam_files in zip(r1_names, prefixes, bams):
             job_name = f"scifi_pipeline.{sample_name}.map.{r1_name}"
             job = pjoin(sample_out_dir, job_name + ".sh")
             log = pjoin(sample_out_dir, job_name + ".log")
@@ -102,12 +105,15 @@ def map_command(
             )
             cmd += job_end()
             write_job_to_file(cmd, job)
-            submit_job(
-                job,
-                params,
-                cmd=args.config["submission_command"],
-                dry=args.dry_run,
-            )
+            if args.nocluster:
+                pool_cmds.append(args.config["submission_command"].split(" ") + [job])
+            else:
+                submit_job(
+                    job,
+                    params,
+                    cmd=args.config["submission_command"],
+                    dry=args.dry_run
+                )
     else:
         # Write prefix and BAM files to array file
         array_file = pjoin(
@@ -159,15 +165,21 @@ def map_command(
             )
             cmd += job_end()
             write_job_to_file(cmd, job)
-            submit_job(
-                job,
-                params,
-                array=array,
-                cmd=args.config["submission_command"],
-                dry=args.dry_run,
-            )
-    return 0
+            if args.nocluster:
+                pool_cmds.append(args.config["submission_command"].split(" ") + [job])
+            else:
+                submit_job(
+                    job,
+                    params,
+                    array=array,
+                    cmd=args.config["submission_command"],
+                    dry=args.dry_run,
+                )
 
+    if pool_cmds:
+        submit_pool(args, pool_cmds)
+
+    return 0
 
 def write_array_params(params, array_file):
     with open(array_file, "w") as handle:

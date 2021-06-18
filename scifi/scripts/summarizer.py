@@ -299,6 +299,14 @@ def main(cli=None):
         .set_index("combinatorial_barcode")[args.r1_attributes]
         .squeeze(axis=0)
     )
+    # print(attrs)
+    # input('Press <Enter>')
+    # print(args.sample_name)
+    # input('Press <Enter>')
+    # print(annotation)
+    # input('Press <Enter>')
+    # print(annotation.query(f"sample_name == '{args.sample_name}'"))
+    # input('Press <Enter>')
 
     # read text files
     df = parse_data(args.input_files, nrows=args.nrows)

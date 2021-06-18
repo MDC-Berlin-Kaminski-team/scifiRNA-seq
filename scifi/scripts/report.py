@@ -180,6 +180,8 @@ def main():
     )
 
     if args.species_mixture:
+        print(metrics)
+        # input('press <enter>')
         plot_species_mixing(metrics)
 
     # Well and droplet inspection
