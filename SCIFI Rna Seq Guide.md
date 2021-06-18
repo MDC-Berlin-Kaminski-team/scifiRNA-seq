@@ -8,7 +8,7 @@
     -   STAR aligner, version 2.6.1d. If you install later versions, then you'll need to rebuild yourself STAR index files
     -   featureCounts
     -   scifiRNA-seq itself:  
-    [https://github.com/epigen/scifiRNA-seq](https://github.com/epigen/scifiRNA-seq)
+    https://github.com/MDC-Berlin-Kaminski-team/scifiRNA-seq
 
 2.  Download picard jar file (picard-2.19.2-CeMM-all.jar) from here:  
     [https://github.com/DanieleBarreca/picard/releases/2.19.2-CeMM](https://github.com/DanieleBarreca/picard/releases/2.19.2-CeMM)
