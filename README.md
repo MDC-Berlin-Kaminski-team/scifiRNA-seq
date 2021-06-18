@@ -1,4 +1,4 @@
-Please refer to [Wiki](https://github.com/MDC-Berlin-Kaminski-team/scifiRNA-seq/wiki) for running / installation Instructions.
+Please refer to [this guide](https://github.com/MDC-Berlin-Kaminski-team/scifiRNA-seq/blob/main/SCIFI%20Rna%20Seq%20Guide.md) for running / installation Instructions.
 
 # About this repository
 
