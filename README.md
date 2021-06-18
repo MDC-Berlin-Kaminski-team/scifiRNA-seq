@@ -55,16 +55,10 @@ performance computing cluster. It currently only supports the SLURM job
 scheduler and uses job arrays.
 
 ## Installation
-In due time the pipeline will be uploaded to Pypi, but for now either set up git
-with SSH and use (requires repository access):
+Clone the repository and install it:
 
 ```bash
-pip install git+ssh://git@github.com/epigen/scifiRNA-seq.git
-```
-Or clone the repository and install it:
-
-```bash
-git clone https://github.com/epigen/scifiRNA-seq
+git clone https://github.com/MDC-Berlin-Kaminski-team/scifiRNA-seq
 cd scifiRNA-seq
 pip install -e .
 ```
